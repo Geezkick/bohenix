@@ -103,15 +103,27 @@
     transform: translateY(-1px) scale(0.98);
 }
 
-/* Primary button glow */
+/* Primary button glow and depth */
 .btn-primary:hover {
     box-shadow:
         0 0 30px rgba(242, 100, 25, 0.4),
-        0 10px 30px rgba(242, 100, 25, 0.2);
+        0 15px 40px rgba(242, 100, 25, 0.25);
+    background: var(--clr-orange-lt);
 }
 
 .btn-outline:hover {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+    border-color: var(--clr-orange);
+    color: var(--clr-orange);
+}
+
+/* Depth shift on all interactive elements */
+.interactive {
+    transition: transform 0.4s var(--ease-spring), filter 0.3s ease;
+}
+
+.interactive:hover {
+    filter: brightness(1.1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
 }
 
 /* Ripple on click */
@@ -231,8 +243,9 @@
 /* Product image premium bg ──────────────────────────────── */
 .product-image {
     position: relative;
-    background: linear-gradient(145deg, #1c1c1c 0%, #232323 60%, #161616 100%);
+    background: linear-gradient(145deg, #121212 0%, #1a1a1a 60%, #0a0a0a 100%);
     overflow: hidden;
+    border-radius: var(--card-radius);
 }
 
 .product-image::before {
@@ -240,12 +253,21 @@
     position: absolute;
     inset: 0;
     background: radial-gradient(ellipse at 50% 40%,
-            rgba(242, 100, 25, .1) 0%, transparent 65%);
+            rgba(0, 195, 255, .15) 0%, transparent 65%);
     pointer-events: none;
 }
 
 .product-card:hover .product-image {
-    background: linear-gradient(145deg, #201a16 0%, #2a1f14 55%, #181410 100%);
+    background: linear-gradient(145deg, #0a1118 0%, #0f1a26 55%, #050a10 100%);
+}
+
+.sequence-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 0%, var(--clr-black) 90%);
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* Category color tokens ─────────────────────────────────── */
@@ -448,6 +470,140 @@
     .newsletter-form input {
         min-width: unset;
     }
+}
+
+/* ── React Hero Section Overrides ────────────────────────── */
+.hero-section-react {
+    position: relative;
+    height: 400vh;
+    /* Scroll depth for sequence */
+}
+
+.hero-sticky-react {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.hero-content-react {
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+    padding: 0 2rem;
+    pointer-events: none;
+    /* Let clicks pass through to 3D if needed, but buttons should have pointer-events: auto */
+}
+
+.hero-content-react * {
+    pointer-events: auto;
+}
+
+.hero-title-static {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(4rem, 12vw, 10rem);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    color: var(--clr-white);
+    margin-bottom: 1rem;
+    text-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+}
+
+.hero-slogan {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1rem, 3vw, 1.8rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--clr-orange);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.hero-slogan::before,
+.hero-slogan::after {
+    content: '';
+    display: block;
+    flex: 0 0 40px;
+    height: 2px;
+    background: var(--clr-orange);
+    box-shadow: 0 0 10px var(--clr-orange);
+}
+
+.hero-desc {
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.8;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+}
+
+.hero-cta {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+/* ── 3D Narrative Labels ────────────────────────────────── */
+.network-label,
+.product-label,
+.software-label,
+.sustainability-label {
+    user-select: none;
+    pointer-events: none;
+    text-align: center;
+}
+
+.glow-text {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2rem, 5vw, 4rem);
+    letter-spacing: 0.1em;
+    color: var(--clr-white);
+    text-shadow: 0 0 20px rgba(0, 195, 255, 0.6), 0 0 40px rgba(0, 195, 255, 0.3);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.sub-label {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+    letter-spacing: 0.25em;
+    color: var(--clr-orange);
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* ── Global Canvas Container Refinements ────────────────── */
+.canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at center, #111111 0%, #000000 100%);
+}
+
+.sequence-canvas-react {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    mix-blend-mode: screen;
+    /* Blend with 3D background */
 }
 
 /* ── Reduced motion ───────────────────────────────────────── */

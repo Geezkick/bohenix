@@ -8,18 +8,19 @@ const Hero = () => {
                 <FrameSequence />
 
                 <div className="hero-content-react">
-                    <p className="hero-eyebrow">Est. 2020 · Global Technology</p>
+                    <p className="hero-eyebrow">The Art of Intelligent Engineering</p>
                     <div className="hero-title-wrap">
                         <h1 className="hero-title-static">BOHENIX</h1>
                     </div>
-                    <p className="hero-slogan">The Art of Intelligent Engineering</p>
                     <p className="hero-desc">
-                        We pioneer next-generation electronics, industrial automation, and technology infrastructure
-                        — delivering precision-engineered solutions that power the world's most demanding environments.
+                        Pioneering next-generation electronics, industrial automation, and technology
+                        infrastructure through precision-engineered solutions.
                     </p>
                     <div className="hero-cta">
                         <button className="btn-primary magnetic interactive ripple-btn">Explore Products</button>
-                        <button className="btn-outline magnetic interactive ripple-btn">Explore More ↓</button>
+                        <button className="btn-outline magnetic interactive ripple-btn" onClick={() => window.scrollTo({ top: window.innerHeight * 4, behavior: 'smooth' })}>
+                            Our Journey ↓
+                        </button>
                     </div>
                 </div>
             </div>

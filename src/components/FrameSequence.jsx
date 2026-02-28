@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLenis } from '@studio-freight/react-lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,38 +13,27 @@ const FrameSequence = () => {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const images = useRef([]);
-    const [loadedCount, setLoadedCount] = useState(0);
-
-    // Detect Tier (simplified)
-    const tier = useMemo(() => {
-        const isMob = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-        return isMob ? 'low' : 'high';
-    }, []);
-
-    const lodStep = tier === 'low' ? 3 : 1;
-    const frameCount = Math.ceil(TOTAL_FRAMES / lodStep);
+    const frame = useRef(1);
+    const targetFrame = useRef(1);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
 
-        // Load frames
+        // Preload logic
         const loadFrames = () => {
             for (let i = 1; i <= TOTAL_FRAMES; i++) {
-                if (i % lodStep === 1 || lodStep === 1) {
-                    const img = new Image();
-                    img.src = SRC(i);
-                    img.onload = () => {
-                        images.current[i] = img;
-                        setLoadedCount(prev => prev + 1);
-                    };
-                }
+                const img = new Image();
+                img.src = SRC(i);
+                img.onload = () => {
+                    images.current[i] = img;
+                    if (i === 1) render(); // Initial render
+                };
             }
         };
 
-        const drawFrame = (frame) => {
-            const realIdx = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(frame * lodStep)));
-            const img = images.current[realIdx] || images.current[1]; // Fallback if not loaded
+        const drawFrame = (f) => {
+            const img = images.current[Math.round(f)];
             if (!img || !img.complete) return;
 
             const { width, height } = canvas;
@@ -53,46 +43,49 @@ const FrameSequence = () => {
             const ix = (width - iw) / 2;
             const iy = (height - ih) / 2;
 
-            ctx.clearRect(0, 0, width, height);
             ctx.drawImage(img, ix, iy, iw, ih);
         };
 
+        let raf;
+        const render = () => {
+            // Smooth interpolation
+            frame.current += (targetFrame.current - frame.current) * 0.15;
+            drawFrame(frame.current);
+            raf = requestAnimationFrame(render);
+        };
+
         const resize = () => {
-            canvas.width = window.innerWidth * (tier === 'low' ? 1 : window.devicePixelRatio);
-            canvas.height = window.innerHeight * (tier === 'low' ? 1 : window.devicePixelRatio);
-            drawFrame(1);
+            canvas.width = window.innerWidth * window.devicePixelRatio;
+            canvas.height = window.innerHeight * window.devicePixelRatio;
+            drawFrame(frame.current);
         };
 
         window.addEventListener('resize', resize);
         resize();
         loadFrames();
-
-        // GSAP ScrollTrigger for scrubbing
-        const tl = gsap.to({}, {
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top top',
-                end: 'bottom bottom',
-                scrub: true,
-                onUpdate: (self) => {
-                    const frame = Math.floor(self.progress * (frameCount - 1)) + 1;
-                    drawFrame(frame);
-                }
-            }
-        });
+        raf = requestAnimationFrame(render);
 
         return () => {
             window.removeEventListener('resize', resize);
-            tl.kill();
-            ScrollTrigger.getAll().forEach(t => t.kill());
+            cancelAnimationFrame(raf);
         };
-    }, [tier, lodStep, frameCount]);
+    }, []);
+
+    useLenis(({ progress }) => {
+        // Map 0-1 progress to frame count
+        // Only scrub during the first part of the scroll (Hero sequence)
+        const transitionEnd = 0.5; // End sequence at 50% scroll
+        const scrubProgress = Math.min(1, progress / transitionEnd);
+        targetFrame.current = 1 + scrubProgress * (TOTAL_FRAMES - 1);
+    });
 
     return (
         <div ref={containerRef} className="frame-sequence-container">
             <div className="canvas-sticky">
                 <canvas ref={canvasRef} className="sequence-canvas-react" />
             </div>
+            {/* Overlay to dim the sequence for narrative sections */}
+            <div className="sequence-overlay" />
         </div>
     );
 };

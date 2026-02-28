@@ -11,6 +11,11 @@ import ProductGrid from './components/ProductGrid';
 import TestimonialsSection from './components/TestimonialsSection';
 import CommunitySection from './components/CommunitySection';
 import Preloader from './components/Preloader';
+import HeroScene from './components/HeroScene';
+import GlobalNetwork from './components/GlobalNetwork';
+import ProductEcosystem from './components/ProductEcosystem';
+import SoftwareServices from './components/SoftwareServices';
+import SustainabilitySection from './components/SustainabilitySection';
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -23,8 +28,12 @@ function App() {
 
                 <main>
                     <Hero />
-                    <StatsBar />
-                    <AboutSection />
+
+                    {/* Narrative Scroll Anchors */}
+                    <section className="narrative-anchor network-anchor" id="network" style={{ height: '200vh' }} />
+                    <section className="narrative-anchor ecosystem-anchor" id="ecosystem" style={{ height: '200vh' }} />
+                    <section className="narrative-anchor software-anchor" id="software" style={{ height: '200vh' }} />
+                    <section className="narrative-anchor sustainability-anchor" id="sustainability" style={{ height: '200vh' }} />
 
                     <section className="home-products section" id="products">
                         <div className="container">
@@ -40,6 +49,9 @@ function App() {
                         </div>
                     </section>
 
+                    <StatsBar />
+                    <AboutSection />
+
                     <TestimonialsSection />
                     <CommunitySection />
                 </main>
@@ -54,6 +66,11 @@ function App() {
                     >
                         <Suspense fallback={null}>
                             <BackgroundParticles />
+                            <HeroScene />
+                            <GlobalNetwork />
+                            <ProductEcosystem />
+                            <SoftwareServices />
+                            <SustainabilitySection />
                         </Suspense>
                     </Canvas>
                 </div>

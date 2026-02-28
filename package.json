@@ -20,6 +20,11 @@
     "react-dom": "^19.2.4",
     "three": "^0.160.0"
   },
+  "overrides": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "three": "^0.160.0"
+  },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.4",
     "vite": "^5.0.8"
