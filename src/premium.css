@@ -1,0 +1,466 @@
+/* ═══════════════════════════════════════════════════════════
+   BOHENIX — ULTRA-PREMIUM UI/UX UPGRADE
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Additional Design Tokens ──────────────────────────────── */
+:root {
+    --clr-circuit: #00c3ff;
+    --clr-circuit2: #00ff9f;
+    --glow-orange: 0 0 20px rgba(242, 100, 25, .55), 0 0 60px rgba(242, 100, 25, .25);
+    --glow-circuit: 0 0 20px rgba(0, 195, 255, .5), 0 0 60px rgba(0, 195, 255, .2);
+    --card-radius: 8px;
+    --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+    --ease-smooth: cubic-bezier(.4, 0, .2, 1);
+}
+
+/* ── Scroll progress bar ─────────────────────────────────── */
+#scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+    height: 2px;
+    background: linear-gradient(90deg, var(--clr-orange), var(--clr-circuit));
+    width: 0%;
+    transition: width .05s linear;
+    box-shadow: 0 0 8px var(--clr-orange);
+    pointer-events: none;
+}
+
+/* ── Hero title wrap (particle canvas container) ─────────── */
+.hero-title-wrap {
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+    margin-bottom: .25rem;
+}
+
+#hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: 0;
+}
+
+/* Gradient text + glow animation on BOHENIX ────────────── */
+.hero-title {
+    position: relative;
+    z-index: 3;
+    color: var(--clr-white);
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    animation: fadeUp 0.8s 0.4s both;
+}
+
+/* Removed titleGlow animation as requested */
+
+/* Circuit energy decorators on slogan ──────────────────── */
+.hero-slogan {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+}
+
+.hero-slogan::before,
+.hero-slogan::after {
+    content: '';
+    display: block;
+    flex: 0 0 28px;
+    height: 2px;
+    background: var(--clr-orange);
+    box-shadow: 0 0 8px var(--clr-orange);
+    border-radius: 1px;
+}
+
+/* Hero eyebrow gradient ─────────────────────────────────── */
+.hero-eyebrow {
+    background: linear-gradient(90deg, var(--clr-orange), var(--clr-circuit));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: .22em;
+}
+
+/* ── Premium Button Upgrades ─────────────────────────────── */
+.btn-primary,
+.btn-outline {
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.4s var(--ease-spring), box-shadow 0.4s var(--ease-smooth), background 0.3s ease;
+}
+
+.btn-primary:hover,
+.btn-outline:hover {
+    transform: translateY(-4px) scale(1.02);
+}
+
+.btn-primary:active,
+.btn-outline:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Primary button glow */
+.btn-primary:hover {
+    box-shadow:
+        0 0 30px rgba(242, 100, 25, 0.4),
+        0 10px 30px rgba(242, 100, 25, 0.2);
+}
+
+.btn-outline:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+/* Ripple on click */
+.ripple-circle {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    background: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    animation: rippleAnim 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    z-index: 5;
+}
+
+@keyframes rippleAnim {
+    to {
+        transform: scale(5);
+        opacity: 0;
+    }
+}
+
+/* ── Nav Brand gradient text ────────────────────────────── */
+.brand {
+    background: linear-gradient(135deg, var(--clr-orange) 0%, var(--clr-orange-lt) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 6px rgba(242, 100, 25, .4));
+    transition: filter .3s;
+}
+
+.brand:hover {
+    filter: drop-shadow(0 0 16px rgba(242, 100, 25, .7));
+}
+
+/* Nav link animated underline ──────────────────────────── */
+.nav-links li a {
+    position: relative;
+}
+
+.nav-links li a::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: .85rem;
+    right: .85rem;
+    height: 1.5px;
+    background: var(--clr-orange);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform .3s var(--ease-smooth);
+    border-radius: 1px;
+    box-shadow: 0 0 6px var(--clr-orange);
+}
+
+.nav-links li a:hover::after,
+.nav-links li a.active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* ── Premium Product Cards ───────────────────────────────── */
+.product-card {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition:
+        transform .4s var(--ease-spring),
+        box-shadow .4s ease,
+        border-color .3s ease;
+    overflow: hidden;
+}
+
+.product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(242, 100, 25, .06) 0%, transparent 60%);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity .3s;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.product-card:hover {
+    transform: translateY(-10px) rotateX(2deg) scale(1.02);
+    box-shadow:
+        0 20px 60px rgba(242, 100, 25, .18),
+        0 4px 20px rgba(0, 0, 0, .5);
+    border-color: var(--clr-orange);
+}
+
+.product-card:hover::before {
+    opacity: 1;
+}
+
+/* Sweep shine on hover ──────────────────────────────────── */
+.product-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(105deg,
+            transparent 40%,
+            rgba(255, 255, 255, .06) 50%,
+            transparent 60%);
+    z-index: 3;
+    transition: left .7s ease;
+    pointer-events: none;
+}
+
+.product-card:hover::after {
+    left: 140%;
+}
+
+/* Product image premium bg ──────────────────────────────── */
+.product-image {
+    position: relative;
+    background: linear-gradient(145deg, #1c1c1c 0%, #232323 60%, #161616 100%);
+    overflow: hidden;
+}
+
+.product-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%,
+            rgba(242, 100, 25, .1) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.product-card:hover .product-image {
+    background: linear-gradient(145deg, #201a16 0%, #2a1f14 55%, #181410 100%);
+}
+
+/* Category color tokens ─────────────────────────────────── */
+.product-cat-tag {
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: .14em;
+}
+
+/* Price pulse ───────────────────────────────────────────── */
+.product-price {
+    animation: pricePulse 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes pricePulse {
+    from {
+        text-shadow: none;
+    }
+
+    to {
+        text-shadow: 0 0 14px rgba(242, 100, 25, .55);
+    }
+}
+
+/* ── Section divider lines ───────────────────────────────── */
+.section {
+    position: relative;
+}
+
+.section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(242, 100, 25, .3) 30%,
+            rgba(0, 195, 255, .3) 70%,
+            transparent);
+    opacity: .8;
+    pointer-events: none;
+}
+
+/* ── Testimonial card premium ────────────────────────────── */
+.testimonial-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonial-card::before {
+    content: '"';
+    position: absolute;
+    top: -.5rem;
+    left: 1rem;
+    font-size: 7rem;
+    line-height: 1;
+    color: rgba(242, 100, 25, .07);
+    font-family: var(--font-display);
+    font-weight: 900;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ── Service num glow on hover ───────────────────────────── */
+.service-card:hover .service-num {
+    opacity: 1;
+    text-shadow: 0 0 20px var(--clr-orange);
+    transition: all .35s;
+}
+
+/* ── Pricing featured glow ───────────────────────────────── */
+.pricing-card.featured {
+    box-shadow:
+        0 0 50px rgba(242, 100, 25, .28),
+        0 20px 60px rgba(0, 0, 0, .5);
+}
+
+/* ── Footer brand ─────────────────────────────────────────── */
+.footer-brand {
+    background: linear-gradient(135deg, var(--clr-orange), var(--clr-orange-lt));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ── Page hero border ─────────────────────────────────────── */
+.page-hero {
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(90deg,
+            transparent,
+            rgba(242, 100, 25, .35) 35%,
+            rgba(0, 195, 255, .25) 65%,
+            transparent) 1;
+}
+
+/* ── Drawer premium border ────────────────────────────────── */
+.side-drawer {
+    border-left: 1px solid rgba(242, 100, 25, .18);
+    box-shadow: -24px 0 60px rgba(0, 0, 0, .6);
+}
+
+/* ── Responsive polish ───────────────────────────────────── */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: clamp(3.5rem, 18vw, 6rem);
+    }
+
+    .hero-slogan {
+        font-size: clamp(.95rem, 4vw, 1.35rem);
+        letter-spacing: .04em;
+    }
+
+    .hero-desc {
+        font-size: .95rem;
+        max-width: 95%;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        align-items: stretch;
+        gap: .75rem;
+    }
+
+    .hero-cta .btn-primary,
+    .hero-cta .btn-outline {
+        width: 100%;
+        text-align: center;
+    }
+
+    .stats-bar .container {
+        justify-content: center;
+        gap: 1.5rem;
+    }
+
+    .stat strong {
+        font-size: 2rem;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pricing-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stars-summary {
+        flex-direction: column;
+        text-align: center;
+        gap: .75rem;
+    }
+
+    .big-rating {
+        font-size: 4rem;
+    }
+
+    .section {
+        padding: 4.5rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .products-grid,
+    .products-grid.large-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .community-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-hero {
+        padding: 3.5rem 0 2.5rem;
+    }
+
+    .page-hero h1 {
+        font-size: 2.4rem;
+    }
+
+    .filter-bar {
+        gap: .35rem;
+    }
+
+    .filter-btn {
+        padding: .35rem .85rem;
+        font-size: .8rem;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .newsletter-form input {
+        min-width: unset;
+    }
+}
+
+/* ── Reduced motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+
+    #hero-canvas {
+        display: none !important;
+    }
+}
