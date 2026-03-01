@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Search, ShoppingBag } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
-const Navigation = () => {
+const Navigation = ({ onSearchOpen }) => {
     const [isScrolled, setIsScrolled] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { getCartCount, setIsCartOpen } = useCart();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -13,34 +14,81 @@ const Navigation = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const cartCount = getCartCount();
+
+    const navLinks = [
+        { href: '#home', label: 'HOME' },
+        { href: '#products', label: 'PRODUCTS' },
+        { href: '#services', label: 'SERVICES' },
+        { href: '#community', label: 'COMMUNITY' }
+    ];
+
     return (
-        <nav className={`main-nav-react ${isScrolled ? 'scrolled' : ''}`}>
-            <div className="nav-container">
-                <a href="#home" className="brand">BOHENIX</a>
+        <>
+            <nav className={`navigation ${isScrolled ? 'scrolled' : ''}`}>
+                <div className="nav-container container">
+                    <a href="#home" className="nav-logo">
+                        BOHENIX
+                    </a>
 
-                <div className={`nav-links-react ${isMenuOpen ? 'open' : ''}`}>
-                    <a href="#home">Home</a>
-                    <a href="#products">Products</a>
-                    <a href="#services">Services</a>
-                    <a href="#plans">Plans</a>
-                    <a href="#community">Community</a>
+                    <div className="nav-menu">
+                        {navLinks.map((link) => (
+                            <a key={link.href} href={link.href} className="nav-link">
+                                {link.label}
+                            </a>
+                        ))}
+                    </div>
+
+                    <div className="nav-actions">
+                        <button className="nav-action-btn" onClick={onSearchOpen}>
+                            SEARCH
+                        </button>
+                        <button className="nav-action-btn" onClick={() => setIsCartOpen(true)}>
+                            CART ({cartCount})
+                        </button>
+                        <a href="#membership" className="nav-action-btn highlight">
+                            MEMBERSHIP
+                        </a>
+                        <button 
+                            className="mobile-toggle"
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        >
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
                 </div>
+            </nav>
 
-                <div className="nav-actions-react">
-                    <button className="icon-btn-react"><Search size={20} /></button>
-                    <button className="icon-btn-react cart-btn-react">
-                        <ShoppingBag size={20} />
-                        <span className="cart-count">0</span>
-                    </button>
-                    <button
-                        className="hamburger-react"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+            <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
+                {navLinks.map((link) => (
+                    <a
+                        key={link.href}
+                        href={link.href}
+                        className="mobile-link"
+                        onClick={() => setIsMobileMenuOpen(false)}
                     >
-                        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
-                </div>
+                        {link.label}
+                    </a>
+                ))}
+                <a href="#membership" className="mobile-link highlight" onClick={() => setIsMobileMenuOpen(false)}>
+                    MEMBERSHIP
+                </a>
+                <button className="mobile-link" onClick={() => {
+                    onSearchOpen();
+                    setIsMobileMenuOpen(false);
+                }}>
+                    SEARCH
+                </button>
+                <button className="mobile-link" onClick={() => {
+                    setIsCartOpen(true);
+                    setIsMobileMenuOpen(false);
+                }}>
+                    CART ({cartCount})
+                </button>
             </div>
-        </nav>
+        </>
     );
 };
 

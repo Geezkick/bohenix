@@ -18,6 +18,7 @@
     "lucide-react": "^0.575.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-intersection-observer": "^10.0.3",
     "three": "^0.160.0"
   },
   "overrides": {
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.4",
+    "fs": "^0.0.1-security",
     "vite": "^5.0.8"
   }
 }
